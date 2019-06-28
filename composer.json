@@ -1,0 +1,25 @@
+{
+    "name": "anatoliy700/yii2-redirect",
+    "description": "php",
+    "type": "yii2-extension",
+    "require": {
+        "php": ">=7.2.0",
+        "yiisoft/yii2": "~2.0.0"
+    },
+    "require-dev": {
+        "yiisoft/yii2-coding-standards": "~2.0"
+    },
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Anatoliy",
+            "email": "anatoliy.rus@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "anatoliy700\\redirect\\": "src/"
+        }
+    }
+}
