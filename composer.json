@@ -4,7 +4,8 @@
     "type": "yii2-extension",
     "require": {
         "php": ">=7.2.0",
-        "yiisoft/yii2": "~2.0.0"
+        "yiisoft/yii2": "~2.0.0",
+        "league/csv": "^9.0"
     },
     "require-dev": {
         "yiisoft/yii2-coding-standards": "~2.0"
@@ -20,6 +21,7 @@
     "autoload": {
         "psr-4": {
             "anatoliy700\\redirect\\": "src/"
-        }
+        },
+        "files": ["vendor/league/csv/src/functions.php"]
     }
 }

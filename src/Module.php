@@ -92,8 +92,12 @@ class Module extends \yii\base\Module
         $redirectItem = $this->urlRepository->getRedirectItemByOldPath($pathInfo);
 
         if (is_null($redirectItem)) {
-            if (isset($this->errorAction)) {
+            if (isset($this->errorAction)) { //TODO: Сделать дефолтный роут
                 \Yii::$app->errorHandler->errorAction = $this->errorAction;
+            } else {
+                if (\Yii::$app->errorHandler->errorAction === $this->id) {
+                    \Yii::$app->errorHandler->errorAction = null;
+                }
             }
             $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
             Yii::$app->errorHandler->handleException($exception);
