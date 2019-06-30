@@ -21,7 +21,6 @@
     "autoload": {
         "psr-4": {
             "anatoliy700\\redirect\\": "src/"
-        },
-        "files": ["vendor/league/csv/src/functions.php"]
+        }
     }
 }

@@ -4,10 +4,12 @@
 namespace anatoliy700\redirect;
 
 
+use anatoliy700\redirect\models\IRedirectItem;
 use anatoliy700\redirect\repositories\IRepository;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
+use yii\web\Application;
 use yii\web\NotFoundHttpException;
 
 class Module extends \yii\base\Module
@@ -46,16 +48,38 @@ class Module extends \yii\base\Module
         parent::__construct($id, $parent, $config);
     }
 
-
     /**
+     * @throws NotFoundHttpException
      * @throws \yii\console\Exception
-     * @throws \yii\web\NotFoundHttpException
      */
     public function init()
     {
         parent::init();
 
-        $this->doRedirect(\Yii::$app->request->resolve());
+        if (Yii::$app->state === Application::STATE_INIT) {
+            Yii::$app->on(Application::EVENT_BEFORE_REQUEST, [$this, 'eventHandler']);
+        } else {
+            $this->run(false);
+        }
+    }
+
+    /**
+     * @param $event
+     * @throws NotFoundHttpException
+     * @throws \yii\console\Exception
+     */
+    public function eventHandler($event)
+    {
+        $this->run();
+    }
+
+    /**
+     * @param string $route
+     * @return array|bool|void
+     */
+    public function createController($route)
+    {
+        $this->notFoundPageSend();
     }
 
     /**
@@ -83,32 +107,50 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * @param array $requestParams
+     * @param bool $beforeRequest
+     * @throws NotFoundHttpException
+     * @throws \yii\console\Exception
      */
-    public function doRedirect(array $requestParams)
+    public function run(bool $beforeRequest = true)
     {
-        list($pathInfo, $queryParams) = $requestParams;
-
+        list($pathInfo, $queryParams) = \Yii::$app->request->resolve();
         $redirectItem = $this->urlRepository->getRedirectItemByOldPath($pathInfo);
-
-        if (is_null($redirectItem)) {
-            if (isset($this->errorAction)) { //TODO: Сделать дефолтный роут
-                \Yii::$app->errorHandler->errorAction = $this->errorAction;
-            } else {
-                if (\Yii::$app->errorHandler->errorAction === $this->id) {
-                    \Yii::$app->errorHandler->errorAction = null;
-                }
-            }
-            $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
-            Yii::$app->errorHandler->handleException($exception);
+        if (isset($redirectItem)) {
+            $this->doRedirect($redirectItem, $queryParams);
+        } elseif (!$beforeRequest){
+            $this->notFoundPageSend();
         }
+    }
 
-        $url = [$redirectItem->newPath];
+    /**
+     * @param IRedirectItem|null $redirectItem
+     * @param $queryParams
+     */
+    public function doRedirect(?IRedirectItem $redirectItem, $queryParams)
+    {
+        $url = [$redirectItem->getNewPath()];
 
         if ($this->isForwardQueryParams) {
             $url = ArrayHelper::merge($url, $queryParams);
         }
 
-        \Yii::$app->response->redirect($url, $redirectItem->statusCode ?? '')->send();
+        \Yii::$app->response->redirect($url, $redirectItem->getStatusCode())->send();
+        exit();
+    }
+
+    /**
+     *
+     */
+    public function notFoundPageSend()
+    {
+        if (isset($this->errorAction)) { //TODO: Сделать дефолтный роут
+            \Yii::$app->errorHandler->errorAction = $this->errorAction;
+        } else {
+            if (\Yii::$app->errorHandler->errorAction === $this->id) {
+                \Yii::$app->errorHandler->errorAction = null;
+            }
+        }
+        $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+        Yii::$app->errorHandler->handleException($exception);
     }
 }

@@ -4,10 +4,19 @@
 namespace anatoliy700\redirect\repositories;
 
 
-use anatoliy700\redirect\models\RedirectItem;
+use anatoliy700\redirect\models\IRedirectItem;
 
 interface IRepository
 {
-    public function getRedirectItemByOldPath(string $oldPath): ?RedirectItem;
+    /**
+     * @param string $oldPath
+     * @return IRedirectItem|null
+     */
+    public function getRedirectItemByOldPath(string $oldPath): ?IRedirectItem;
 
+    /**
+     * @param array $config
+     * @return IRedirectItem
+     */
+    public function getRedirectItem(array $config): IRedirectItem;
 }

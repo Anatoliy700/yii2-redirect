@@ -4,24 +4,22 @@
 namespace anatoliy700\redirect\models;
 
 
-use yii\base\BaseObject;
-
-class RedirectItem extends BaseObject
+class RedirectItem extends BaseRedirectItem
 {
     /**
      * @var string
      */
-    private $oldPath;
+    protected $oldPath;
 
     /**
      * @var string
      */
-    private $newPath;
+    protected $newPath;
 
     /**
      * @var string
      */
-    private $statusCode;
+    protected $statusCode;
 
 
     /**
@@ -41,7 +39,7 @@ class RedirectItem extends BaseObject
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getOldPath(): string
     {
@@ -49,7 +47,7 @@ class RedirectItem extends BaseObject
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getNewPath(): string
     {
@@ -57,7 +55,7 @@ class RedirectItem extends BaseObject
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getStatusCode(): string
     {
