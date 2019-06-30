@@ -21,11 +21,18 @@ class Module extends \yii\base\Module
     public $urlRepository;
 
     /**
+     * Можно указать Action, который будет вызван,
+     * в случае если модуль работает в постзагрузочном режиме
+     * и не было найдено ни одного подходящего иаршрута для редиректа.
+     *
      * @var string
      */
     public $errorAction;
 
     /**
+     * Позволяет указать необходимость включения queryParams,
+     * если они есть, в маршрут, на который производится редирект
+     *
      * @var bool
      */
     public $isForwardQueryParams = false;
@@ -74,6 +81,9 @@ class Module extends \yii\base\Module
     }
 
     /**
+     * Защита от ошибки на случай если в конфигурации установлено
+     * оба варианта работы модуля (предзагрузка и постзагрузка).
+     *
      * @param string $route
      * @return array|bool|void
      */
@@ -117,7 +127,7 @@ class Module extends \yii\base\Module
         $redirectItem = $this->urlRepository->getRedirectItemByOldPath($pathInfo);
         if (isset($redirectItem)) {
             $this->doRedirect($redirectItem, $queryParams);
-        } elseif (!$beforeRequest){
+        } elseif (!$beforeRequest) {
             $this->notFoundPageSend();
         }
     }
