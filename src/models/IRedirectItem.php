@@ -3,7 +3,6 @@
 
 namespace anatoliy700\redirect\models;
 
-
 interface IRedirectItem
 {
     /**

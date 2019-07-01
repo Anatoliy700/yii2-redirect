@@ -3,7 +3,6 @@
 
 namespace anatoliy700\redirect\repositories;
 
-
 use anatoliy700\redirect\models\IRedirectItem;
 use krok\filesystem\FileNotFoundException;
 use League\Csv\Exception;
@@ -75,7 +74,6 @@ class CSVRepository extends Repository
      */
     public function getRedirectItemByOldPath(string $oldPath): ?IRedirectItem
     {
-
         $path = \Yii::getAlias($this->filePath);
         if (!file_exists($path)) {
             throw new FileNotFoundException("File {$path} not found");
@@ -86,8 +84,8 @@ class CSVRepository extends Repository
             $reader->setDelimiter($this->delimiter);
 
             $filterByOldPath = function ($record) use ($oldPath) {
-                return ltrim($record['oldPath'],
-                        '/') === $oldPath; //TODO: продумать подстанову 'oldPath' если название поля изменится
+                //TODO: продумать подстанову 'oldPath' если название поля изменится
+                return ltrim($record['oldPath'], '/') === $oldPath;
             };
 
             $stmt = (new Statement())
@@ -105,15 +103,18 @@ class CSVRepository extends Repository
             }
 
             $redirectItemConfig = $records->fetchOne();
-
         } catch (Exception $e) {
             //TODO: Обработать исключение
             throw new ErrorException($e->getMessage());
         }
 
         if ($redirectItemConfig) {
-            return $this->getRedirectItem($this->getParametersForController($this->redirectItemClass,
-                $records->fetchOne()));
+            return $this->getRedirectItem(
+                $this->getParametersForController(
+                    $this->redirectItemClass,
+                    $records->fetchOne()
+                )
+            );
         }
 
         return null;
@@ -140,7 +141,7 @@ class CSVRepository extends Repository
         $missingHeaders = array_diff($requiredParams, $headers);
 
         if ($missingHeaders) {
-            throw new InvalidArgumentException("No required headers found: ".implode(', ', $missingHeaders));
+            throw new InvalidArgumentException('No required headers found: ' . implode(', ', $missingHeaders));
         }
     }
 

@@ -3,7 +3,6 @@
 
 namespace anatoliy700\redirect\models;
 
-
 class RedirectItem extends BaseRedirectItem
 {
     /**

@@ -3,7 +3,6 @@
 
 namespace anatoliy700\redirect\repositories;
 
-
 use anatoliy700\redirect\models\IRedirectItem;
 
 interface IRepository

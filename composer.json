@@ -17,6 +17,9 @@
             "email": "anatoliy.rus@gmail.com"
         }
     ],
+    "scripts": {
+        "check": "vendor\\bin\\phpcs -v --extensions=php --standard=vendor/yiisoft/yii2-coding-standards/Yii2 src"
+    },
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {

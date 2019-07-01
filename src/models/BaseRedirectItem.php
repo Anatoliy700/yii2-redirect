@@ -1,8 +1,6 @@
 <?php
 
-
 namespace anatoliy700\redirect\models;
-
 
 use yii\base\BaseObject;
 

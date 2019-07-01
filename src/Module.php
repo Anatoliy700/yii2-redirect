@@ -3,7 +3,6 @@
 
 namespace anatoliy700\redirect;
 
-
 use anatoliy700\redirect\models\IRedirectItem;
 use anatoliy700\redirect\repositories\IRepository;
 use Yii;
@@ -44,7 +43,6 @@ class Module extends \yii\base\Module
      * @param null $parent
      * @param array $config
      * @throws InvalidConfigException
-     * @throws \ReflectionException
      */
     public function __construct($id, $parent = null, $config = [])
     {
