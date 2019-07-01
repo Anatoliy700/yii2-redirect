@@ -1,6 +1,5 @@
 <?php
 
-
 namespace anatoliy700\redirect;
 
 use anatoliy700\redirect\models\IRedirectItem;
@@ -14,6 +13,7 @@ use yii\web\NotFoundHttpException;
 
 class Module extends \yii\base\Module
 {
+    public $controllerNamespace = 'anatoliy700\redirect\controllers';
 
     /**
      * @var IRepository
@@ -80,18 +80,6 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * Защита от ошибки на случай если в конфигурации установлено
-     * оба варианта работы модуля (предзагрузка и постзагрузка).
-     *
-     * @param string $route
-     * @return array|bool|void
-     */
-    public function createController($route)
-    {
-        $this->notFoundPageSend();
-    }
-
-    /**
      * @param $config
      * @throws InvalidConfigException
      */
@@ -123,11 +111,9 @@ class Module extends \yii\base\Module
     public function doRedirect(?IRedirectItem $redirectItem, $queryParams)
     {
         $url = [$redirectItem->getNewPath()];
-
         if ($this->isForwardQueryParams) {
             $url = ArrayHelper::merge($url, $queryParams);
         }
-
         \Yii::$app->response->redirect($url, $redirectItem->getStatusCode())->send();
         exit();
     }
@@ -139,12 +125,8 @@ class Module extends \yii\base\Module
     {
         if (isset($this->errorAction)) { //TODO: Сделать дефолтный роут
             \Yii::$app->errorHandler->errorAction = $this->errorAction;
-        } else {
-            if (\Yii::$app->errorHandler->errorAction === $this->id) {
-                \Yii::$app->errorHandler->errorAction = null;
-            }
+            $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+            Yii::$app->errorHandler->handleException($exception);
         }
-        $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
-        Yii::$app->errorHandler->handleException($exception);
     }
 }
