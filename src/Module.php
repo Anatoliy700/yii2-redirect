@@ -8,6 +8,7 @@ use anatoliy700\redirect\models\IRedirectItem;
 use anatoliy700\redirect\repositories\IRepository;
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\di\Instance;
 use yii\helpers\ArrayHelper;
 use yii\web\Application;
 use yii\web\NotFoundHttpException;
@@ -23,7 +24,7 @@ class Module extends \yii\base\Module
     /**
      * Можно указать Action, который будет вызван,
      * в случае если модуль работает в постзагрузочном режиме
-     * и не было найдено ни одного подходящего иаршрута для редиректа.
+     * и не было найдено ни одного подходящего маршрута для редиректа.
      *
      * @var string
      */
@@ -95,25 +96,10 @@ class Module extends \yii\base\Module
     /**
      * @param $config
      * @throws InvalidConfigException
-     * @throws \ReflectionException
      */
     protected function setUrlRepository($config)
     {
-        if (is_array($config) && isset($config['class'])) {
-            $class = $config['class'];
-        } elseif (is_string($config)) {
-            $class = $config;
-        } else {
-            throw new InvalidConfigException('Object configuration must be an array containing a "class" element.');
-        }
-
-        if (!(new \ReflectionClass($class))->implementsInterface(IRepository::class)) {
-            throw new InvalidConfigException(
-                "The class {$class} passed does not implement the interface ".IRepository::class.'.'
-            );
-        }
-
-        $this->urlRepository = \Yii::createObject($config);
+        $this->urlRepository = Instance::ensure($config, IRepository::class);
     }
 
     /**
