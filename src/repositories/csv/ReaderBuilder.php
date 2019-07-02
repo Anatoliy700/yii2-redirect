@@ -48,7 +48,10 @@ class ReaderBuilder extends BaseBuilder
         return $this;
     }
 
-    protected function getObject(): object
+    /**
+     * @return \League\Csv\Statement|object
+     */
+    protected function getObject()
     {
         if (is_null($this->object)) {
             $this->object = $this->getTargetClassName()::createFromPath($this->filePath, 'r');

@@ -11,16 +11,16 @@ use yii\helpers\ArrayHelper;
 abstract class BaseBuilder
 {
     /**
-     * @var Statement
+     * @var
      */
     protected $object;
 
 
     /**
-     * @return Statement
+     * @return object
      * @throws \yii\base\InvalidConfigException
      */
-    public function build(): object
+    public function build()
     {
         $this->setParams();
 
@@ -30,10 +30,10 @@ abstract class BaseBuilder
     abstract protected function setParams();
 
     /**
-     * @return Statement
+     * @return Statement|object
      * @throws \yii\base\InvalidConfigException
      */
-    protected function getObject(): object
+    protected function getObject()
     {
         if (is_null($this->object)) {
             $this->object = Yii::createObject($this->getTargetClassName());
