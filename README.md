@@ -27,7 +27,7 @@ composer require anatoliy700/yii2-redirect
     'redirect' => [
         'class' => '\anatoliy700\redirect\Module',
         'urlRepository' => [
-            'class' => '\anatoliy700\redirect\repositories\CSVRepository',
+            'class' => \anatoliy700\redirect\repositories\csv\CSVRepository::class,
             'filePath' => '@app/redirectFile/redirect.csv'
         ]
     ]
