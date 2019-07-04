@@ -23,30 +23,37 @@ composer require anatoliy700/yii2-redirect
 Подключить в конфигурации приложения в разделе модули:
 
 ```php
-'modules => [
+'modules' => [
     'redirect' => [
-        'class' => '\anatoliy700\redirect\Module',
-        'urlRepository' => [
-            'class' => \anatoliy700\redirect\repositories\csv\CSVRepository::class,
-            'filePath' => '@app/redirectFile/redirect.csv'
-        ]
+         'class' => \yii\base\Module::class,
+         'controllerNamespace' => 'anatoliy700\redirect\controllers',
+         'layout' => '/index',
+         'viewPath' => '@app/extensions/myExtensions/redirect/src/views'
     ]
-]'
+]
 ```
-Выше указана минимально необходимая конфигурация модуля
-
-Модуль может работать в двух вариантах: `предзагрузка` и `постзагрузка`
-
-`Предзагрузка` реазлизуется добавлением модуля в раздел `bootstrap` конфигурации приложения:
-
 ```php
-'bootstrap' => ['redirect']
+ 'container' => [
+        'definitions' => [
+             'anatoliy700\redirect\IRedirect' => 'anatoliy700\redirect\Redirect',
+             'anatoliy700\redirect\repositories\IRepository' => [
+                 'class' => 'anatoliy700\redirect\repositories\csv\CSVRepository',
+                 'filePath' => '@app/redirectFile/redirect.csv',
+             ],
+             'anatoliy700\redirect\models\IRedirectItem' => 'anatoliy700\redirect\models\RedirectItem'
+        ],
+        'singletons' => [
+             'krok\configure\ConfigureInterface' => function () {
+                 $configurable = [
+                     'anatoliy700\redirect\Configurable'
+                 ];
+                 $serializer = Yii::createObject('krok\configure\serializers\SerializerInterface');
+                 
+                 return new \krok\configure\Configure($configurable, $serializer);
+             }
+        ]
+  ]
 ```
-В этом случае все входящие запросы сначала обрабатываются модулем 'Redirect', и если маршрут, который должен быть переадресован, не был найден, вся последующая обработка передается приложению.
-Не очень экономный вариант по ресурсам, так как каждый запрос будет обрабатываться модулем 'Redirect'.
-
-`Постзагрузка` реализуется добавлением модуля как маршрут в `errorAction` компонента `errorHandler`:
-
 ```php
 'components' => [
      'class' => \yii\web\ErrorHandler::class,
@@ -54,5 +61,4 @@ composer require anatoliy700/yii2-redirect
 ]
 ```
 
-Этот вариант подключения предпочтительнее, так как управление моулю 'Redirect' передается только в случае если приложение не может обработать запрошенный маршрут и должно было вернуть ошибку '404'.
-
+Выше указана минимально необходимая конфигурация модуля.
