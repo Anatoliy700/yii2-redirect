@@ -60,7 +60,6 @@ class ReaderBuilder extends BaseBuilder
         return $this->object;
     }
 
-
     /**
      * @inheritDoc
      */

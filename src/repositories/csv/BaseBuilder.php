@@ -27,6 +27,9 @@ abstract class BaseBuilder
         return $this->getObject();
     }
 
+    /**
+     * @return mixed
+     */
     abstract protected function setParams();
 
     /**
@@ -81,7 +84,6 @@ abstract class BaseBuilder
             $this->object = $this->getObject()->$setMethodName($val);
         }
     }
-
 
     /**
      * @return string

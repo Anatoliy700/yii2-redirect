@@ -69,6 +69,10 @@ class StatementBuilder extends BaseBuilder
         $this->object = $this->getObject()->$name($val);
     }
 
+    /**
+     * @return ReflectionProperty[]
+     * @throws \ReflectionException
+     */
     protected function getProperties()
     {
         $reflection = new ReflectionClass(static::class);

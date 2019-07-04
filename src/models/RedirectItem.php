@@ -3,7 +3,7 @@
 
 namespace anatoliy700\redirect\models;
 
-class RedirectItem extends BaseRedirectItem
+class RedirectItem implements IRedirectItem
 {
     /**
      * @var string
@@ -26,15 +26,13 @@ class RedirectItem extends BaseRedirectItem
      * @param string $oldPath
      * @param string $newPath
      * @param string $statusCode
-     * @param array $config
      */
-    public function __construct(string $oldPath, string $newPath, string $statusCode = '301', $config = [])
+    public function __construct(string $oldPath, string $newPath, string $statusCode = '301')
     {
-        $this->oldPath = $oldPath;
-        $this->newPath = $newPath;
-        $this->statusCode = $statusCode;
+        $this->oldPath = $this->normaliseData($oldPath);
+        $this->newPath = $this->normaliseData($newPath);
+        $this->statusCode = $this->normaliseData($statusCode);
 
-        parent::__construct($config);
     }
 
     /**
@@ -59,30 +57,6 @@ class RedirectItem extends BaseRedirectItem
     public function getStatusCode(): string
     {
         return $this->statusCode;
-    }
-
-    /**
-     * @param string $oldPath
-     */
-    public function setOldPath(string $oldPath): void
-    {
-        $this->oldPath = $this->normaliseData($oldPath);
-    }
-
-    /**
-     * @param string $newPath
-     */
-    public function setNewPath(string $newPath): void
-    {
-        $this->newPath = $this->normaliseData($newPath);
-    }
-
-    /**
-     * @param string $statusCode
-     */
-    public function setStatusCode(string $statusCode): void
-    {
-        $this->statusCode = $this->normaliseData($statusCode);
     }
 
     /**

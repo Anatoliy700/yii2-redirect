@@ -1,11 +1,12 @@
 {
     "name": "anatoliy700/yii2-redirect",
-    "description": "php",
+    "description": "Реализует редирект со старых ссылок на новые",
     "type": "yii2-extension",
     "require": {
         "php": ">=7.2.0",
         "yiisoft/yii2": "~2.0.0",
-        "league/csv": "^9.0"
+        "league/csv": "^9.0",
+        "yii2-developer/yii2-configure": "~1.2.0"
     },
     "require-dev": {
         "yiisoft/yii2-coding-standards": "~2.0"
