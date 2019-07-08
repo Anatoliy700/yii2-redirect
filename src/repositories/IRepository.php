@@ -4,18 +4,14 @@
 namespace anatoliy700\redirect\repositories;
 
 use anatoliy700\redirect\models\IRedirectItem;
+use yii\web\NotFoundHttpException;
 
 interface IRepository
 {
     /**
      * @param string $oldPath
-     * @return IRedirectItem|null
-     */
-    public function getRedirectItemByOldPath(string $oldPath): ?IRedirectItem;
-
-    /**
-     * @param array $config
      * @return IRedirectItem
+     * @throws NotFoundHttpException
      */
-    public function getRedirectItem(array $config): IRedirectItem;
+    public function getRedirectItemByOldPath(string $oldPath): IRedirectItem;
 }

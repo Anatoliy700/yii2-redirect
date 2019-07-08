@@ -6,6 +6,8 @@ namespace anatoliy700\redirect;
 
 use anatoliy700\redirect\models\IRedirectItem;
 use anatoliy700\redirect\repositories\IRepository;
+use yii\web\NotFoundHttpException;
+use yii\web\Request;
 
 class Redirect implements IRedirect
 {
@@ -24,12 +26,12 @@ class Redirect implements IRedirect
     }
 
     /**
-     * @param string $pathInfo
-     * @param array $queryParams
+     * @param Request $request
      * @return IRedirectItem
+     * @throws NotFoundHttpException
      */
-    public function getRedirectItem(string $pathInfo, array $queryParams): ?IRedirectItem
+    public function getRedirectItem(Request $request): IRedirectItem
     {
-        return $this->repository->getRedirectItemByOldPath($pathInfo);
+        return $this->repository->getRedirectItemByOldPath($request->pathInfo);
     }
 }
