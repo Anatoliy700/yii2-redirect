@@ -25,10 +25,7 @@ composer require anatoliy700/yii2-redirect
 ```php
 'modules' => [
     'redirect' => [
-         'class' => \yii\base\Module::class,
-         'controllerNamespace' => 'anatoliy700\redirect\controllers',
-         'layout' => '/index',
-         'viewPath' => '@app/extensions/myExtensions/redirect/src/views'
+         'class' => 'anatoliy700\redirect\Module',
     ]
 ]
 ```
@@ -56,7 +53,7 @@ composer require anatoliy700/yii2-redirect
 ```
 ```php
 'components' => [
-     'class' => \yii\web\ErrorHandler::class,
+     'class' => 'yii\web\ErrorHandler',
       'errorAction' => 'redirect'
 ]
 ```
