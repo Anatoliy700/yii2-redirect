@@ -4,7 +4,6 @@
 namespace anatoliy700\redirect\actions;
 
 use anatoliy700\redirect\Configurable;
-use anatoliy700\redirect\exceptions\RedirectItemNotFoundException;
 use anatoliy700\redirect\IRedirect;
 use krok\configure\ConfigurableNotFoundException;
 use krok\configure\ConfigureInterface;
@@ -44,14 +43,13 @@ class RedirectAction extends Action
      */
     public function run(): Response
     {
-        try {
-            $redirectItem = $this->redirect->getRedirectItem(Yii::$app->request);
-
-            return Yii::$app->getResponse()->redirect([$redirectItem->getNewPath()], $redirectItem->getStatusCode());
-        } catch (RedirectItemNotFoundException $e) {
+        $redirectItem = $this->redirect->getRedirectItem(Yii::$app->request);
+        if (is_null($redirectItem)) {
             Yii::$app->errorHandler->errorAction = $this->configurable->errorAction;
             $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
             Yii::$app->errorHandler->handleException($exception);
         }
+
+        return Yii::$app->getResponse()->redirect($redirectItem->getNewPath(), $redirectItem->getStatusCode());
     }
 }

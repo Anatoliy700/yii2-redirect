@@ -10,8 +10,7 @@ interface IRedirect
 {
     /**
      * @param Request $request
-     * @return IRedirectItem
-     * @throws RedirectItemNotFoundException
+     * @return IRedirectItem|null
      */
-    public function getRedirectItem(Request $request): IRedirectItem;
+    public function getRedirectItem(Request $request): ?IRedirectItem;
 }

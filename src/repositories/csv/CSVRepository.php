@@ -3,7 +3,6 @@
 namespace anatoliy700\redirect\repositories\csv;
 
 use anatoliy700\redirect\exceptions\FileNotFoundException;
-use anatoliy700\redirect\exceptions\RedirectItemNotFoundException;
 use anatoliy700\redirect\models\IRedirectItem;
 use anatoliy700\redirect\repositories\Repository;
 use League\Csv\Exception;
@@ -24,19 +23,18 @@ class CSVRepository extends Repository
 
     /**
      * @param string $oldPath
-     * @return IRedirectItem
+     * @return IRedirectItem|null
      * @throws ErrorException
      * @throws FileNotFoundException
      * @throws InvalidConfigException
-     * @throws RedirectItemNotFoundException
      */
-    public function getRedirectItemByOldPath(string $oldPath): IRedirectItem
+    public function getRedirectItemByOldPath(string $oldPath): ?IRedirectItem
     {
         $path = $this->getFilePath();
         $redirectItemConfig = $this->getRedirectItemConfig($path, $oldPath);
 
         if (!$redirectItemConfig) {
-            throw new RedirectItemNotFoundException($oldPath);
+            return null;
         }
 
         return $this->createRedirectItem($redirectItemConfig);

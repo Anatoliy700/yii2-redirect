@@ -28,11 +28,10 @@ class Redirect implements IRedirect
 
     /**
      * @param Request $request
-     * @return IRedirectItem
-     * @throws RedirectItemNotFoundException
+     * @return IRedirectItem|null
      * @throws NotFoundHttpException
      */
-    public function getRedirectItem(Request $request): IRedirectItem
+    public function getRedirectItem(Request $request): ?IRedirectItem
     {
         return $this->repository->getRedirectItemByOldPath($request->resolve()[0]);
     }
